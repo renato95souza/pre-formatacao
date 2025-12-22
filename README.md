@@ -21,4 +21,4 @@ O script realiza o backup (compactação `.zip`) das seguintes pastas:
 Execute o comando abaixo no PowerShell para iniciar o script de backup:
 
 ```powershell
-powershell.exe Start-Process powershell -Verb RunAs -ArgumentList '-NoProfile -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((irm ''https://raw.githubusercontent.com/renato95souza/pre-formatacao/main/pre-install.ps1'')))"'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((irm 'https://raw.githubusercontent.com/renato95souza/pre-formatacao/main/pre-install.ps1')))"
