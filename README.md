@@ -13,6 +13,7 @@ O script realiza o backup (compactação `.zip`) das seguintes pastas:
 * **DBeaver:** Bancos de dados salvos, scripts e conexões.
 * **Notepad++:** Configurações completas, plugins e histórico de backups.
 * **.oci:** Configurações e chaves da Oracle Cloud Infrastructure.
+* **WinSCP:** Configurações, conexões e senhas.
 
 ---
 
