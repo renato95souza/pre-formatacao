@@ -1,10 +1,8 @@
 <#! Script: pre-format.ps1 !#>
 
 # --- Step 1: Detect the REAL Documents Folder Path ---
-# Using COM object to find the official 'My Documents' path (handles OneDrive & Language)
 try {
     $ShellApp = New-Object -ComObject Shell.Application
-    # 0x05 is the constant for 'My Documents'
     $DocumentsPath = $ShellApp.NameSpace(0x05).Self.Path
 } catch {
     $DocumentsPath = Join-Path $env:USERPROFILE "Documents"
@@ -17,13 +15,16 @@ if (-not (Test-Path $BackupPath)) {
     New-Item -Path $BackupPath -ItemType Directory -Force | Out-Null 
 }
 
-# Folders to zip
+# Standard folders (relative to User Profile)
 $TargetFolders = @{
     "MobaXterm"   = "AppData\Roaming\MobaXterm"
     "DBeaverData" = "AppData\Roaming\DBeaverData"
     "NotepadPP"   = "AppData\Roaming\Notepad++"
     "OCI_Config"  = ".oci"
 }
+
+# Individual files (Absolute paths)
+$OracleTNSFile = "C:\app\client\product\19.0.0\client_1\network\admin\tnsnames.ora"
 
 Write-Host "--- Starting Pre-Formatting Backup ---" -ForegroundColor Cyan
 Write-Host "Target: $BackupPath" -ForegroundColor Gray
@@ -36,7 +37,6 @@ $WinSCPBackupFile = Join-Path $BackupPath "WinSCP_Backup.reg"
 
 if (Test-Path "HKCU:\Software\Martin Prikryl\WinSCP 2") {
     try {
-        # Exporting registry key using reg.exe
         & reg.exe export $WinSCPRegistryKey $WinSCPBackupFile /y | Out-Null
         Write-Host " [OK]" -ForegroundColor Green
     } catch {
@@ -63,6 +63,19 @@ foreach ($AppName in $TargetFolders.Keys) {
     } else {
         Write-Host "[SKIP] $AppName path not found." -ForegroundColor Yellow
     }
+}
+
+# --- Step 5: Backup Oracle TNS Names ---
+if (Test-Path $OracleTNSFile) {
+    try {
+        Write-Host "Backing up Oracle TNS Names..." -NoNewline
+        Copy-Item -Path $OracleTNSFile -Destination (Join-Path $BackupPath "tnsnames.ora") -Force
+        Write-Host " [OK]" -ForegroundColor Green
+    } catch {
+        Write-Host " [ERROR] Failed to copy tnsnames.ora." -ForegroundColor Red
+    }
+} else {
+    Write-Host "[SKIP] Oracle TNS file not found." -ForegroundColor Yellow
 }
 
 Write-Host "`nBackup process completed!" -ForegroundColor Cyan
