@@ -12,7 +12,7 @@ O script realiza o backup (compactação `.zip`) das seguintes pastas:
 * **MobaXterm:** Sessões, chaves e configurações.
 * **DBeaver:** Bancos de dados salvos, scripts e conexões.
 * **Notepad++:** Configurações completas, plugins e histórico de backups.
-* * **WinSCP:** Configurações, conexões e senhas.
+* **WinSCP:** Configurações, conexões e senhas.
 * **.oci:** Configurações e chaves da Oracle Cloud Infrastructure.
 
 ---
